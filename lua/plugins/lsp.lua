@@ -2,6 +2,12 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      setup = {
+        postgrestools = function()
+          require("lspconfig/configs").postgrestools = require("lspconfig.server_configurations.postgrestools")
+          return true
+        end,
+      },
       servers = {
         gopls = {
           settings = {
@@ -12,8 +18,8 @@ return {
               staticcheck = true,
               gofumpt = true,
               goimports = true,
-              usePlaceholders = true,
-              completeUnimported = true,
+              useplaceholders = true,
+              completeunimported = true,
             },
           },
         },
@@ -30,6 +36,13 @@ return {
             },
           },
         },
+        sqls = {
+          on_attach = function(client)
+            -- Disable formatting to avoid conflicts with pgformatter
+            client.server_capabilities.documentFormattingProvider = false
+          end,
+        },
+        postgrestools = {},
       },
     },
   },
